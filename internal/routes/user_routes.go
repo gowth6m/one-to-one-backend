@@ -36,5 +36,18 @@ func UserRoutes(group *gin.Engine) {
 		userGroup.GET("/current", func(c *gin.Context) {
 			userHandler.GetCurrentUser(c)
 		})
+
+		userGroup.POST("/reportee/add", func(c *gin.Context) {
+			userHandler.AddReportee(c)
+		})
+
+		userGroup.POST("/reportee/remove", func(c *gin.Context) {
+			userHandler.RemoveReportee(c)
+		})
+
+		userGroup.POST("/reports-to/add", func(c *gin.Context) {
+			userHandler.AddReportsToUser(c)
+		})
 	}
+
 }

@@ -15,6 +15,322 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/one-to-one/create": {
+            "post": {
+                "description": "Create a new weekly report",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "one-to-one"
+                ],
+                "summary": "Create a new weekly report",
+                "parameters": [
+                    {
+                        "description": "Weekly report object to be created",
+                        "name": "report",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/one_to_one.CreateWeeklyReportRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Weekly report created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/one_to_one.WeeklyReportResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format or parameters",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/one-to-one/report-to": {
+            "get": {
+                "description": "Get a weekly report by week and year for a reportTo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "one-to-one"
+                ],
+                "summary": "Get a weekly report by week and year for a reportTo",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Week number",
+                        "name": "week",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Year",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Weekly report",
+                        "schema": {
+                            "$ref": "#/definitions/one_to_one.WeeklyReportResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format or parameters",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/one-to-one/report-to/all": {
+            "get": {
+                "description": "Get all weekly reports",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "one-to-one"
+                ],
+                "summary": "Get all weekly reports for a reportTo",
+                "responses": {
+                    "200": {
+                        "description": "List of weekly reports",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/one_to_one.WeeklyReportResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/one-to-one/report-to/update": {
+            "put": {
+                "description": "Update a weekly report",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "one-to-one"
+                ],
+                "summary": "Update a weekly report for a reportTo",
+                "parameters": [
+                    {
+                        "description": "Weekly report object to be updated",
+                        "name": "report",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/one_to_one.UpdateWeeklyReportRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Weekly report updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/one_to_one.WeeklyReportResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format or parameters",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/one-to-one/reportee/all": {
+            "get": {
+                "description": "Get all weekly reports",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "one-to-one"
+                ],
+                "summary": "Get all weekly reports for a reportee",
+                "responses": {
+                    "200": {
+                        "description": "List of weekly reports",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/one_to_one.WeeklyReportResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/one-to-one/reportee/update": {
+            "put": {
+                "description": "Update a weekly report",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "one-to-one"
+                ],
+                "summary": "Update a weekly report for a reportee",
+                "parameters": [
+                    {
+                        "description": "Weekly report object to be updated",
+                        "name": "report",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/one_to_one.UpdateWeeklyReportRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Weekly report updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/one_to_one.WeeklyReportResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format or parameters",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/reportee/one-to-one": {
+            "get": {
+                "description": "Get a weekly report by week and year for a reportee",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "one-to-one"
+                ],
+                "summary": "Get a weekly report by week and year for a reportee",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Week number",
+                        "name": "week",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Year",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Weekly report",
+                        "schema": {
+                            "$ref": "#/definitions/one_to_one.WeeklyReportResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format or parameters",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/user/all": {
             "get": {
                 "description": "Get all users",
@@ -238,9 +554,410 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/reportee/add": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add reportee",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Add reportee",
+                "parameters": [
+                    {
+                        "description": "Reportee object to be added",
+                        "name": "reportee",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.AddReporteeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reportee added successfully",
+                        "schema": {
+                            "$ref": "#/definitions/user.UserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format or parameters",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "Reportee not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/user/reportee/remove": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove reportee",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Remove reportee",
+                "parameters": [
+                    {
+                        "description": "Reportee object to be removed",
+                        "name": "reportee",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.RemoveReporteeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reportee removed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/user.UserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format or parameters",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "Reportee not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/user/reports-to/add": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add reports to user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Add reports to user",
+                "parameters": [
+                    {
+                        "description": "Report object to be added",
+                        "name": "report",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.AddReportsToRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Report added successfully",
+                        "schema": {
+                            "$ref": "#/definitions/user.UserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format or parameters",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "one_to_one.Agenda": {
+            "type": "object",
+            "required": [
+                "label"
+            ],
+            "properties": {
+                "label": {
+                    "type": "string"
+                }
+            }
+        },
+        "one_to_one.Challenges": {
+            "type": "object",
+            "required": [
+                "label",
+                "theme"
+            ],
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "theme": {
+                    "type": "string"
+                }
+            }
+        },
+        "one_to_one.CreateWeeklyReportRequest": {
+            "type": "object",
+            "required": [
+                "agendas",
+                "challenges",
+                "goneWell",
+                "week",
+                "wellbeingScores",
+                "year"
+            ],
+            "properties": {
+                "agendas": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/one_to_one.Agenda"
+                    }
+                },
+                "challenges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/one_to_one.Challenges"
+                    }
+                },
+                "goneWell": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/one_to_one.GoneWell"
+                    }
+                },
+                "week": {
+                    "type": "integer"
+                },
+                "wellbeingScores": {
+                    "$ref": "#/definitions/one_to_one.WellbeingScores"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "one_to_one.GoneWell": {
+            "type": "object",
+            "required": [
+                "label",
+                "theme"
+            ],
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "theme": {
+                    "type": "string"
+                }
+            }
+        },
+        "one_to_one.UpdateWeeklyReportRequest": {
+            "type": "object",
+            "required": [
+                "agendas",
+                "challenges",
+                "goneWell",
+                "id",
+                "week",
+                "wellbeingScores",
+                "year"
+            ],
+            "properties": {
+                "agendas": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/one_to_one.Agenda"
+                    }
+                },
+                "challenges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/one_to_one.Challenges"
+                    }
+                },
+                "goneWell": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/one_to_one.GoneWell"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "week": {
+                    "type": "integer"
+                },
+                "wellbeingScores": {
+                    "$ref": "#/definitions/one_to_one.WellbeingScores"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "one_to_one.WeeklyReportResponse": {
+            "type": "object",
+            "properties": {
+                "agendas": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/one_to_one.Agenda"
+                    }
+                },
+                "challenges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/one_to_one.Challenges"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "goneWell": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/one_to_one.GoneWell"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "reportee": {
+                    "type": "string"
+                },
+                "reportingTo": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "week": {
+                    "type": "integer"
+                },
+                "wellbeingScores": {
+                    "$ref": "#/definitions/one_to_one.WellbeingScores"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "one_to_one.WellbeingScores": {
+            "type": "object",
+            "required": [
+                "growth",
+                "impactAndProductivity",
+                "wellbeing",
+                "workOverall",
+                "workRelationships"
+            ],
+            "properties": {
+                "growth": {
+                    "type": "integer"
+                },
+                "impactAndProductivity": {
+                    "type": "integer"
+                },
+                "wellbeing": {
+                    "type": "integer"
+                },
+                "workOverall": {
+                    "type": "integer"
+                },
+                "workRelationships": {
+                    "type": "integer"
+                }
+            }
+        },
+        "user.AddReporteeRequest": {
+            "type": "object",
+            "required": [
+                "reporteeEmail"
+            ],
+            "properties": {
+                "reporteeEmail": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.AddReportsToRequest": {
+            "type": "object",
+            "required": [
+                "reportsToEmail"
+            ],
+            "properties": {
+                "reportsToEmail": {
+                    "type": "string"
+                }
+            }
+        },
         "user.CreateUserRequest": {
             "type": "object",
             "required": [
@@ -291,6 +1008,17 @@ const docTemplate = `{
                 }
             }
         },
+        "user.RemoveReporteeRequest": {
+            "type": "object",
+            "required": [
+                "reporteeEmail"
+            ],
+            "properties": {
+                "reporteeEmail": {
+                    "type": "string"
+                }
+            }
+        },
         "user.UserResponse": {
             "type": "object",
             "properties": {
@@ -336,11 +1064,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1",
-	Host:             "api-one-to-one.vercel.app",
+	Host:             "one-to-one.backend.vercel.app",
 	BasePath:         "/",
 	Schemes:          []string{"https"},
-	Title:            "Online OneToOne API",
-	Description:      "This is the REST API for Online OneToOne.",
+	Title:            "OneToOne API",
+	Description:      "This is the REST API for OneToOne.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

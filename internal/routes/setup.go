@@ -11,6 +11,9 @@ func SetupRoutes(router *gin.Engine) {
 	// Default routes for the root path
 	DefaultRoutes(router)
 
-	// Game routes for the /user path
+	// User routes for the /user path
 	UserRoutes(router)
+
+	// One-to-one routes for the /one-to-one path
+	OneToOneRoutes(router)
 }

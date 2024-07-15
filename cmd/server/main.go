@@ -11,10 +11,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @title Online OneToOne API
+// @title OneToOne API
 // @version 1
-// @description This is the REST API for Online OneToOne.
-// @host api-one-to-one.vercel.app
+// @description This is the REST API for OneToOne.
+// @host one-to-one.backend.vercel.app
 // @BasePath /
 // @schemes https
 // @securityDefinitions.apikey BasicAuth

@@ -15,6 +15,10 @@ type UserRepository interface {
 	GetAllUsers(c context.Context) ([]User, error)
 	GetUserByID(c context.Context, id primitive.ObjectID) (*User, error)
 	GetUserByEmail(c context.Context, email string) (*User, error)
+	
+	AddReportee(c context.Context, userID primitive.ObjectID, reporteeID primitive.ObjectID) error
+	RemoveReportee(c context.Context, userID primitive.ObjectID, reporteeID primitive.ObjectID) error
+	AddReportsTo(c context.Context, userID primitive.ObjectID, reportsToID primitive.ObjectID) error
 }
 
 type repositoryImpl struct {
@@ -86,10 +90,41 @@ func (r *repositoryImpl) GetUserByEmail(c context.Context, email string) (*User,
 		return nil, err
 	}
 
-	reportees := make([]string, len(user.Reportees))
-	for i, reportee := range user.Reportees {
-		reportees[i] = reportee.Hex()
+	return &user, nil
+}
+
+func (r *repositoryImpl) AddReportee(c context.Context, userID primitive.ObjectID, reporteeID primitive.ObjectID) error {
+	filter := bson.M{"_id": userID}
+	update := bson.M{"$addToSet": bson.M{"reportees": reporteeID}}
+
+	_, err := r.collection.UpdateOne(c, filter, update)
+	if err != nil {
+		return err
 	}
 
-	return &user, nil
+	return nil
+}
+
+func (r *repositoryImpl) RemoveReportee(c context.Context, userID primitive.ObjectID, reporteeID primitive.ObjectID) error {
+	filter := bson.M{"_id": userID}
+	update := bson.M{"$pull": bson.M{"reportees": reporteeID}}
+
+	_, err := r.collection.UpdateOne(c, filter, update)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *repositoryImpl) AddReportsTo(c context.Context, userID primitive.ObjectID, reportsToID primitive.ObjectID) error {
+	filter := bson.M{"_id": userID}
+	update := bson.M{"$set": bson.M{"reportsTo": reportsToID}}
+
+	_, err := r.collection.UpdateOne(c, filter, update)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

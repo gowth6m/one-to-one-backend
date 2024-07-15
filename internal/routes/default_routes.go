@@ -11,8 +11,8 @@ import (
 // For /
 func DefaultRoutes(group *gin.Engine) {
 	group.GET("/", func(c *gin.Context) {
-		api.Success(c, http.StatusOK, "Online OneToOne", gin.H{
-			"message": "Welcome to the Online OneToOne REST API v0",
+		api.Success(c, http.StatusOK, "OneToOne", gin.H{
+			"message": "Welcome to the OneToOne REST API v0",
 			"version": config.AppConfig().App.AppVersion,
 		})
 	})

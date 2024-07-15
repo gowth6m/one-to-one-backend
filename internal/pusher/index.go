@@ -6,12 +6,11 @@ import (
 	"github.com/pusher/pusher-http-go/v5"
 )
 
-const GameChannel = "game-channel"
+const OneToOneChannel = "one-to-one-channel"
 
 const (
-	PlayerJoined string = "player-joined"
-	MoveMade     string = "move-made"
-	GameReset    string = "game-reset"
+	ReceivedMessage string = "received-message"
+	WantsToChat     string = "wants-to-chat"
 )
 
 var Client *pusher.Client

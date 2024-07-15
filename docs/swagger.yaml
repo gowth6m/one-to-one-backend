@@ -1,5 +1,155 @@
 basePath: /
 definitions:
+  one_to_one.Agenda:
+    properties:
+      label:
+        type: string
+    required:
+    - label
+    type: object
+  one_to_one.Challenges:
+    properties:
+      label:
+        type: string
+      theme:
+        type: string
+    required:
+    - label
+    - theme
+    type: object
+  one_to_one.CreateWeeklyReportRequest:
+    properties:
+      agendas:
+        items:
+          $ref: '#/definitions/one_to_one.Agenda'
+        type: array
+      challenges:
+        items:
+          $ref: '#/definitions/one_to_one.Challenges'
+        type: array
+      goneWell:
+        items:
+          $ref: '#/definitions/one_to_one.GoneWell'
+        type: array
+      week:
+        type: integer
+      wellbeingScores:
+        $ref: '#/definitions/one_to_one.WellbeingScores'
+      year:
+        type: integer
+    required:
+    - agendas
+    - challenges
+    - goneWell
+    - week
+    - wellbeingScores
+    - year
+    type: object
+  one_to_one.GoneWell:
+    properties:
+      label:
+        type: string
+      theme:
+        type: string
+    required:
+    - label
+    - theme
+    type: object
+  one_to_one.UpdateWeeklyReportRequest:
+    properties:
+      agendas:
+        items:
+          $ref: '#/definitions/one_to_one.Agenda'
+        type: array
+      challenges:
+        items:
+          $ref: '#/definitions/one_to_one.Challenges'
+        type: array
+      goneWell:
+        items:
+          $ref: '#/definitions/one_to_one.GoneWell'
+        type: array
+      id:
+        type: string
+      week:
+        type: integer
+      wellbeingScores:
+        $ref: '#/definitions/one_to_one.WellbeingScores'
+      year:
+        type: integer
+    required:
+    - agendas
+    - challenges
+    - goneWell
+    - id
+    - week
+    - wellbeingScores
+    - year
+    type: object
+  one_to_one.WeeklyReportResponse:
+    properties:
+      agendas:
+        items:
+          $ref: '#/definitions/one_to_one.Agenda'
+        type: array
+      challenges:
+        items:
+          $ref: '#/definitions/one_to_one.Challenges'
+        type: array
+      createdAt:
+        type: string
+      goneWell:
+        items:
+          $ref: '#/definitions/one_to_one.GoneWell'
+        type: array
+      id:
+        type: string
+      reportee:
+        type: string
+      reportingTo:
+        type: string
+      updatedAt:
+        type: string
+      week:
+        type: integer
+      wellbeingScores:
+        $ref: '#/definitions/one_to_one.WellbeingScores'
+      year:
+        type: integer
+    type: object
+  one_to_one.WellbeingScores:
+    properties:
+      growth:
+        type: integer
+      impactAndProductivity:
+        type: integer
+      wellbeing:
+        type: integer
+      workOverall:
+        type: integer
+      workRelationships:
+        type: integer
+    required:
+    - growth
+    - impactAndProductivity
+    - wellbeing
+    - workOverall
+    - workRelationships
+    type: object
+  user.AddReporteeRequest:
+    properties:
+      reporteeEmail:
+        type: string
+    required:
+    - reporteeEmail
+    type: object
+  user.AddReportsToRequest:
+    properties:
+      reportsToEmail:
+        type: string
+    required:
+    - reportsToEmail
+    type: object
   user.CreateUserRequest:
     properties:
       email:
@@ -34,6 +184,13 @@ definitions:
       user:
         $ref: '#/definitions/user.UserResponse'
     type: object
+  user.RemoveReporteeRequest:
+    properties:
+      reporteeEmail:
+        type: string
+    required:
+    - reporteeEmail
+    type: object
   user.UserResponse:
     properties:
       createdAt:
@@ -55,13 +212,225 @@ definitions:
       updatedAt:
         type: string
     type: object
-host: api-one-to-one.vercel.app
+host: one-to-one.backend.vercel.app
 info:
   contact: {}
-  description: This is the REST API for Online OneToOne.
-  title: Online OneToOne API
+  description: This is the REST API for OneToOne.
+  title: OneToOne API
   version: "1"
 paths:
+  /one-to-one/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new weekly report
+      parameters:
+      - description: Weekly report object to be created
+        in: body
+        name: report
+        required: true
+        schema:
+          $ref: '#/definitions/one_to_one.CreateWeeklyReportRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Weekly report created successfully
+          schema:
+            $ref: '#/definitions/one_to_one.WeeklyReportResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new weekly report
+      tags:
+      - one-to-one
+  /one-to-one/report-to:
+    get:
+      consumes:
+      - application/json
+      description: Get a weekly report by week and year for a reportTo
+      parameters:
+      - description: Week number
+        in: query
+        name: week
+        required: true
+        type: integer
+      - description: Year
+        in: query
+        name: year
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Weekly report
+          schema:
+            $ref: '#/definitions/one_to_one.WeeklyReportResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get a weekly report by week and year for a reportTo
+      tags:
+      - one-to-one
+  /one-to-one/report-to/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all weekly reports
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of weekly reports
+          schema:
+            items:
+              $ref: '#/definitions/one_to_one.WeeklyReportResponse'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all weekly reports for a reportTo
+      tags:
+      - one-to-one
+  /one-to-one/report-to/update:
+    put:
+      consumes:
+      - application/json
+      description: Update a weekly report
+      parameters:
+      - description: Weekly report object to be updated
+        in: body
+        name: report
+        required: true
+        schema:
+          $ref: '#/definitions/one_to_one.UpdateWeeklyReportRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Weekly report updated successfully
+          schema:
+            $ref: '#/definitions/one_to_one.WeeklyReportResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update a weekly report for a reportTo
+      tags:
+      - one-to-one
+  /one-to-one/reportee/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all weekly reports
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of weekly reports
+          schema:
+            items:
+              $ref: '#/definitions/one_to_one.WeeklyReportResponse'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all weekly reports for a reportee
+      tags:
+      - one-to-one
+  /one-to-one/reportee/update:
+    put:
+      consumes:
+      - application/json
+      description: Update a weekly report
+      parameters:
+      - description: Weekly report object to be updated
+        in: body
+        name: report
+        required: true
+        schema:
+          $ref: '#/definitions/one_to_one.UpdateWeeklyReportRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Weekly report updated successfully
+          schema:
+            $ref: '#/definitions/one_to_one.WeeklyReportResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update a weekly report for a reportee
+      tags:
+      - one-to-one
+  /reportee/one-to-one:
+    get:
+      consumes:
+      - application/json
+      description: Get a weekly report by week and year for a reportee
+      parameters:
+      - description: Week number
+        in: query
+        name: week
+        required: true
+        type: integer
+      - description: Year
+        in: query
+        name: year
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Weekly report
+          schema:
+            $ref: '#/definitions/one_to_one.WeeklyReportResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get a weekly report by week and year for a reportee
+      tags:
+      - one-to-one
   /user/all:
     get:
       consumes:
@@ -209,6 +578,123 @@ paths:
             additionalProperties: true
             type: object
       summary: Login user
+      tags:
+      - users
+  /user/reportee/add:
+    post:
+      consumes:
+      - application/json
+      description: Add reportee
+      parameters:
+      - description: Reportee object to be added
+        in: body
+        name: reportee
+        required: true
+        schema:
+          $ref: '#/definitions/user.AddReporteeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reportee added successfully
+          schema:
+            $ref: '#/definitions/user.UserResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Reportee not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Add reportee
+      tags:
+      - users
+  /user/reportee/remove:
+    post:
+      consumes:
+      - application/json
+      description: Remove reportee
+      parameters:
+      - description: Reportee object to be removed
+        in: body
+        name: reportee
+        required: true
+        schema:
+          $ref: '#/definitions/user.RemoveReporteeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reportee removed successfully
+          schema:
+            $ref: '#/definitions/user.UserResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Reportee not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Remove reportee
+      tags:
+      - users
+  /user/reports-to/add:
+    post:
+      consumes:
+      - application/json
+      description: Add reports to user
+      parameters:
+      - description: Report object to be added
+        in: body
+        name: report
+        required: true
+        schema:
+          $ref: '#/definitions/user.AddReportsToRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Report added successfully
+          schema:
+            $ref: '#/definitions/user.UserResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Add reports to user
       tags:
       - users
 schemes:

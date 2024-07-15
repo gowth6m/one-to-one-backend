@@ -122,7 +122,7 @@ func (h *UserHandler) LoginUser(c *gin.Context) {
 		return
 	}
 
-	token, err := middleware.GenerateJWTToken(user.Email)
+	token, err := middleware.GenerateJWTToken(user.Email, user.ID.Hex())
 	if err != nil {
 		api.Error(c, http.StatusInternalServerError, "An error occurred while processing your request", nil)
 		return
@@ -161,3 +161,121 @@ func (h *UserHandler) GetCurrentUser(c *gin.Context) {
 
 	api.Success(c, http.StatusOK, "Retrieved user successfully", user)
 }
+
+// @Summary Add reportee
+// @Description Add reportee
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param reportee body AddReporteeRequest true "Reportee object to be added"
+// @Success 200 {object} UserResponse "Reportee added successfully"
+// @Failure 400 {object} map[string]interface{} "Invalid request format or parameters"
+// @Failure 404 {object} map[string]interface{} "Reportee not found"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Security BearerAuth
+// @Router /user/reportee/add [post]
+func (h *UserHandler) AddReportee(c *gin.Context) {
+	currentUser, err := h.Repo.GetUserByEmail(c.Request.Context(), c.GetString("email"))
+	if err != nil {
+		api.Error(c, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+
+	var reqPayload AddReporteeRequest
+	if err := c.ShouldBindJSON(&reqPayload); err != nil {
+		api.Error(c, http.StatusBadRequest, err.Error(), nil)
+		return
+	}
+
+	reportee, err := h.Repo.GetUserByEmail(c.Request.Context(), reqPayload.ReporteeEmail)
+	if err != nil {
+		api.Error(c, http.StatusNotFound, "Reportee not found", nil)
+		return
+	}
+
+	if err := h.Repo.AddReportee(c.Request.Context(), currentUser.ID, reportee.ID); err != nil {
+		api.Error(c, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+
+	api.Success(c, http.StatusOK, "Added reportee successfully", reportee)
+}
+
+// @Summary Remove reportee
+// @Description Remove reportee
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param reportee body RemoveReporteeRequest true "Reportee object to be removed"
+// @Success 200 {object} UserResponse "Reportee removed successfully"
+// @Failure 400 {object} map[string]interface{} "Invalid request format or parameters"
+// @Failure 404 {object} map[string]interface{} "Reportee not found"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Security BearerAuth
+// @Router /user/reportee/remove [post]
+func (h *UserHandler) RemoveReportee(c *gin.Context) {
+	currentUser, err := h.Repo.GetUserByEmail(c.Request.Context(), c.GetString("email"))
+	if err != nil {
+		api.Error(c, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+
+	var reqPayload RemoveReporteeRequest
+	if err := c.ShouldBindJSON(&reqPayload); err != nil {
+		api.Error(c, http.StatusBadRequest, err.Error(), nil)
+		return
+	}
+
+	reportee, err := h.Repo.GetUserByEmail(c.Request.Context(), reqPayload.ReporteeEmail)
+	if err != nil {
+		api.Error(c, http.StatusNotFound, "Reportee not found", nil)
+		return
+	}
+
+	if err := h.Repo.RemoveReportee(c.Request.Context(), currentUser.ID, reportee.ID); err != nil {
+		api.Error(c, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+
+	api.Success(c, http.StatusOK, "Removed reportee successfully", reportee)
+}
+
+// @Summary Add reports to user
+// @Description Add reports to user
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param report body AddReportsToRequest true "Report object to be added"
+// @Success 200 {object} UserResponse "Report added successfully"
+// @Failure 400 {object} map[string]interface{} "Invalid request format or parameters"
+// @Failure 404 {object} map[string]interface{} "User not found"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Security BearerAuth
+// @Router /user/reports-to/add [post]
+func (h *UserHandler) AddReportsToUser(c *gin.Context) {
+	currentUser, err := h.Repo.GetUserByEmail(c.Request.Context(), c.GetString("email"))
+	if err != nil {
+		api.Error(c, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+
+	var reqPayload AddReportsToRequest
+	if err := c.ShouldBindJSON(&reqPayload); err != nil {
+		api.Error(c, http.StatusBadRequest, err.Error(), nil)
+		return
+	}
+
+	report, err := h.Repo.GetUserByEmail(c.Request.Context(), reqPayload.ReportsToEmail)
+	if err != nil {
+		api.Error(c, http.StatusNotFound, "User not found", nil)
+		return
+	}
+
+	if err := h.Repo.AddReportsTo(c.Request.Context(), currentUser.ID, report.ID); err != nil {
+		api.Error(c, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+
+	api.Success(c, http.StatusOK, "Added report successfully", report)
+}
+

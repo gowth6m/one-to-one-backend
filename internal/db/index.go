@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const DATABASE_NAME = "OneToOne"
+const DATABASE_NAME = "one-to-one"
 const COLLECTION_USER = "User"
 const COLLECTION_WEEKLY_REPORT = "WeeklyReport"
 

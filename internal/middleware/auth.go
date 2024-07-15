@@ -14,7 +14,7 @@ import (
 
 var jwtSecret = []byte(config.AppConfig().Auth.JWTSecret)
 
-func GenerateJWTToken(email string) (string, error) {
+func GenerateJWTToken(email string, userId string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	// Create a map to store our claims
@@ -23,6 +23,7 @@ func GenerateJWTToken(email string) (string, error) {
 	// Set token claims
 	claims["iss"] = config.AppConfig().Auth.JWTIssuer
 	claims["email"] = email
+	claims["userId"] = userId
 	claims["exp"] = time.Now().Add(time.Hour * time.Duration(config.AppConfig().Auth.JWTExpireInHours)).Unix()
 	claims["iat"] = time.Now().Unix()
 
@@ -70,6 +71,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			c.Set("email", claims["email"])
+			c.Set("userId", claims["userId"])
 			c.Set("accountType", claims["accountType"])
 		} else {
 			api.Error(c, http.StatusUnauthorized, "Invalid token", nil)

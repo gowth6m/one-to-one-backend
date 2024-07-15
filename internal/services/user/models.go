@@ -35,6 +35,18 @@ type CreateUserRequest struct {
 	LastName  string `json:"lastName" binding:"required,alpha"`
 }
 
+type AddReporteeRequest struct {
+	ReporteeEmail string `json:"reporteeEmail" binding:"required,email"`
+}
+
+type AddReportsToRequest struct {
+	ReportsToEmail string `json:"reportsToEmail" binding:"required,email"`
+}
+
+type RemoveReporteeRequest struct {
+	ReporteeEmail string `json:"reporteeEmail" binding:"required,email"`
+}
+
 // ---------------------------------------------------------------------------------------------------
 // ----------------------------------------- RESPONSE OBJECTS ----------------------------------------
 // ---------------------------------------------------------------------------------------------------
@@ -63,8 +75,8 @@ type User struct {
 	Email     string               `json:"email" bson:"email" validate:"required,email"`
 	FirstName string               `json:"firstName,omitempty" bson:"firstName,omitempty"`
 	LastName  string               `json:"lastName,omitempty" bson:"lastName,omitempty"`
-	ReportsTo *primitive.ObjectID  `json:"reportsTo,omitempty" bson:"reportsTo,omitempty"`
-	Reportees []primitive.ObjectID `json:"reportees,omitempty" bson:"reportees,omitempty"`
+	ReportsTo *primitive.ObjectID  `json:"reportsTo" bson:"reportsTo,omitempty"`
+	Reportees []primitive.ObjectID `json:"reportees" bson:"reportees,omitempty"`
 	CreatedAt primitive.DateTime   `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
 	UpdatedAt primitive.DateTime   `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
 }
