@@ -1,0 +1,221 @@
+basePath: /
+definitions:
+  user.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - firstName
+    - lastName
+    - password
+    type: object
+  user.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  user.LoginResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/user.UserResponse'
+    type: object
+  user.UserResponse:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: string
+      lastName:
+        type: string
+      reportees:
+        items:
+          type: string
+        type: array
+      reportsTo:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+host: api-one-to-one.vercel.app
+info:
+  contact: {}
+  description: This is the REST API for Online OneToOne.
+  title: Online OneToOne API
+  version: "1"
+paths:
+  /user/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Users retrieved successfully
+          schema:
+            items:
+              $ref: '#/definitions/user.UserResponse'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all users
+      tags:
+      - users
+  /user/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: User object to be created
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User created successfully
+          schema:
+            $ref: '#/definitions/user.UserResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new user
+      tags:
+      - users
+  /user/current:
+    get:
+      consumes:
+      - application/json
+      description: Get current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User retrieved successfully
+          schema:
+            $ref: '#/definitions/user.UserResponse'
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get current user
+      tags:
+      - users
+  /user/email/{email}:
+    get:
+      consumes:
+      - application/json
+      description: Get user by email
+      parameters:
+      - description: User email
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User retrieved successfully
+          schema:
+            $ref: '#/definitions/user.UserResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get user by email
+      tags:
+      - users
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user
+      parameters:
+      - description: User login credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User logged in successfully
+          schema:
+            $ref: '#/definitions/user.LoginResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Invalid credentials
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login user
+      tags:
+      - users
+schemes:
+- https
+securityDefinitions:
+  BasicAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
