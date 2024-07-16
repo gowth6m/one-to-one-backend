@@ -341,6 +341,42 @@ paths:
       summary: Update a weekly report for a reportTo
       tags:
       - one-to-one
+  /one-to-one/reportee:
+    get:
+      consumes:
+      - application/json
+      description: Get a weekly report by week and year for a reportee
+      parameters:
+      - description: Week number
+        in: query
+        name: week
+        required: true
+        type: integer
+      - description: Year
+        in: query
+        name: year
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Weekly report
+          schema:
+            $ref: '#/definitions/one_to_one.WeeklyReportResponse'
+        "400":
+          description: Invalid request format or parameters
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get a weekly report by week and year for a reportee
+      tags:
+      - one-to-one
   /one-to-one/reportee/all:
     get:
       consumes:
@@ -393,42 +429,6 @@ paths:
             additionalProperties: true
             type: object
       summary: Update a weekly report for a reportee
-      tags:
-      - one-to-one
-  /reportee/one-to-one:
-    get:
-      consumes:
-      - application/json
-      description: Get a weekly report by week and year for a reportee
-      parameters:
-      - description: Week number
-        in: query
-        name: week
-        required: true
-        type: integer
-      - description: Year
-        in: query
-        name: year
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Weekly report
-          schema:
-            $ref: '#/definitions/one_to_one.WeeklyReportResponse'
-        "400":
-          description: Invalid request format or parameters
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: Internal server error
-          schema:
-            additionalProperties: true
-            type: object
-      summary: Get a weekly report by week and year for a reportee
       tags:
       - one-to-one
   /user/all:

@@ -197,6 +197,59 @@ const docTemplate = `{
                 }
             }
         },
+        "/one-to-one/reportee": {
+            "get": {
+                "description": "Get a weekly report by week and year for a reportee",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "one-to-one"
+                ],
+                "summary": "Get a weekly report by week and year for a reportee",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Week number",
+                        "name": "week",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Year",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Weekly report",
+                        "schema": {
+                            "$ref": "#/definitions/one_to_one.WeeklyReportResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format or parameters",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/one-to-one/reportee/all": {
             "get": {
                 "description": "Get all weekly reports",
@@ -257,59 +310,6 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "Weekly report updated successfully",
-                        "schema": {
-                            "$ref": "#/definitions/one_to_one.WeeklyReportResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request format or parameters",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/reportee/one-to-one": {
-            "get": {
-                "description": "Get a weekly report by week and year for a reportee",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "one-to-one"
-                ],
-                "summary": "Get a weekly report by week and year for a reportee",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Week number",
-                        "name": "week",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Year",
-                        "name": "year",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Weekly report",
                         "schema": {
                             "$ref": "#/definitions/one_to_one.WeeklyReportResponse"
                         }
