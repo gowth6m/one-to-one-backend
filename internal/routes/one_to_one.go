@@ -36,7 +36,7 @@ func OneToOneRoutes(group *gin.Engine) {
 		})
 
 		// --- REPORT TO ROUTES ---
-		
+
 		oneToOneGroup.GET("/report-to/all", func(c *gin.Context) {
 			oneToOneHandler.GetAllWeeklyReportsForReportTo(c)
 		})
