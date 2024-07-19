@@ -41,6 +41,8 @@ func (h *OneToOneHandler) CreateWeeklyReport(c *gin.Context) {
 		return
 	}
 
+	CleanCreateWeeklyReportRequest(&reqPayload)
+
 	createdReport, err := h.Repo.CreateWeeklyReport(c.Request.Context(), reqPayload, userID)
 	if err != nil {
 		api.Error(c, http.StatusInternalServerError, err.Error(), nil)
@@ -97,6 +99,8 @@ func (h *OneToOneHandler) UpdateWeeklyReportForReportee(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
+
+	CleanUpdateWeeklyReportRequest(&reqPayload)
 
 	updatedReport, err := h.Repo.UpdateWeeklyReport(c.Request.Context(), reqPayload, userID, true)
 	if err != nil {

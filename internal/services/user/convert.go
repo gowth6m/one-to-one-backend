@@ -1,6 +1,8 @@
 package user
 
 import (
+	"fmt"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -12,6 +14,11 @@ func ConvertCreateUserRequestToUser(req CreateUserRequest) (User, error) {
 		return User{}, err
 	}
 
+	defaultReportsTo, err := primitive.ObjectIDFromHex("6695a2379a9e246dc998afc7")
+	if err != nil {
+		return User{}, fmt.Errorf("invalid default ReportsTo ObjectID: %v", err)
+	}
+
 	return User{
 		ID:        primitive.NewObjectID(),
 		Password:  string(hashed),
@@ -19,7 +26,7 @@ func ConvertCreateUserRequestToUser(req CreateUserRequest) (User, error) {
 		FirstName: req.FirstName,
 		LastName:  req.LastName,
 		Reportees: []primitive.ObjectID{},
-		ReportsTo: nil,
+		ReportsTo: &defaultReportsTo,
 	}, nil
 }
 

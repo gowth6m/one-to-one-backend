@@ -2,6 +2,7 @@ package one_to_one
 
 import (
 	"context"
+	"fmt"
 	"one-to-one/internal/db"
 	user "one-to-one/internal/services/user"
 	"time"
@@ -9,6 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type OneToOneRepository interface {
@@ -41,6 +43,9 @@ func (r *repositoryImpl) CreateWeeklyReport(c context.Context, report CreateWeek
 	var reportingTo user.User
 	err = r.userCollection.FindOne(c, bson.M{"_id": reportee.ReportsTo}).Decode(&reportingTo)
 	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return WeeklyReport{}, fmt.Errorf("no user to report to")
+		}
 		return WeeklyReport{}, err
 	}
 
@@ -76,7 +81,12 @@ func (r *repositoryImpl) GetAllWeeklyReports(c context.Context, currentUserId pr
 		filter = bson.M{"reportingTo": currentUserId}
 	}
 
-	cursor, err := r.collection.Find(c, filter)
+	findOptions := options.Find().SetSort(bson.D{
+		{Key: "year", Value: -1},
+		{Key: "week", Value: -1},
+	})
+
+	cursor, err := r.collection.Find(c, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
